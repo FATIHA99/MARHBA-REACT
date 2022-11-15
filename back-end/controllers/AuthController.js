@@ -5,6 +5,7 @@
 // TODO function reset password to update password  after the email sended 
 // TODO fuctions to render pages
 // TODO function to logout
+
 const model = require('../models/AuthModel.js')
 const bcrypt = require('bcryptjs')
 const mongoose = require('mongoose')
@@ -94,7 +95,10 @@ const confirmation = (req, res) => {
     const tkn = jwt.verify(token, process.env.SECRETWORD)
     req.data = tkn
     User.findOneAndUpdate({ email: req.data.email }, { confirmation: true })
-        .then(res.send('confirm '))
+        .then(()=>{
+            // res.json({message:'confirmation success .'})
+            res.redirect('http://localhost:3000/api/auth/login')
+        })
 }
 
 
@@ -123,7 +127,9 @@ const resetPassword = (req, res) => {
     const passHash = bcrypt.hashSync(pass, 10)
     User.findOneAndUpdate({ email: req.mail }, { password: passHash })
         .then((e) => {
-            res.json({message: 'your password updated successfully '})
+            // res.json({message: 'your password updated successfully '})
+            res.redirect('http://localhost:3000/api/auth/login')
+            res.redire
 
         })
         .catch(error => {
@@ -133,22 +139,12 @@ const resetPassword = (req, res) => {
 
 
 
-// const renderLoginPage = (req, res) => { res.render('login') }
-// const renderRegisterPage = (req, res) => { res.render('register') }
-// const renderConfirmationPage = (req, res) => {
-//     const token = req.params
-//     res.render('confirmation', { token })
-// }
+
 const Client = (req, res) => { res.json({message:'Client Page '}) }
 const Livreur = (req, res) => { res.json({message:'Livreur Page'}) }
 
-// const forgetPasswordPage = (req, res) => { res.render('forgotPassword') }
-// const resetPasswordPage = (req, res) => {
-//     const mailToken = req.params
-//     res.render('resetPassword', { mailToken })
-// }
 const logout = (req, res) => {
     ls.clear()
-    res.json('local storage is clear now ')
+    res.json({message:'local storage is clear now '})
 }
 module.exports = { signUp, signIn, confirmation, forgetPassword, resetPassword,  Client, Livreur, logout }

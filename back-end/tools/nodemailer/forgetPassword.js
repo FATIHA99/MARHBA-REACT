@@ -28,7 +28,7 @@ function forgetpassword() {
     from: '"MARHABA :forget password" <fatihhaa27@gmail.com>',
     to: mail, 
     subject: "acount verification",
-    html: '<a href="http://localhost:8080/api/auth/resetPassword/' + mailToken + '">click here to reset password </a>',
+    // html: '<a href="http://localhost:8080/api/auth/resetPassword/' + mailToken + '">click here to reset password </a>',
 
     html: ' <form  action="http://localhost:3001/api/auth/resetPassword/'+ mailToken +'" method="post"><h1> reset password </h1><input input="text" placeholder="password" name="password"> </br> <input type="submit" name="submit"></form>'
   };
