@@ -1,4 +1,4 @@
-// !this file contain the
+// !this file contain :
 // TODO  sign in and signup function
 // TODO  function confirmation for the email adresse 
 // TODO  function forget password to  send the verification to the email 
@@ -17,10 +17,11 @@ const password_verification = require('../tools/nodemailer/forgetPassword')
 const HandleError = require('../tools/ErrorHandling');
 const ErrorHandling = require('../tools/ErrorHandling');
 
-
+// ! signUP :  first i store email body in the local s , and i hash the pass then i will  check the email if it   already exist , if not i will affect the hash password in body pass and i create the user then i confirm the account with nodemailer 
 function signUp(req, res) {
+    
     const { body } = req;
-    ls('email', req.body.email)
+    ls('email', req.body.email) //! i will use this email in the  email  nodemailer verification
     const hashPassword = bcrypt.hashSync(body.password, 10)
     User.findOne({ email: body.email })
         .then((e) => {
@@ -39,10 +40,7 @@ function signUp(req, res) {
         })
         .catch()
 }
-
-
-
-
+// !  to sign in   i check first  the email if exist if true  i check again the password (after compare ) ,if everything is good i will check the confirmation is true , i will create token and stor them 
 const signIn = (req, res) => {
     const { body } = req
     const pass = body.password
@@ -58,19 +56,16 @@ const signIn = (req, res) => {
             else {
 
                 if (e.confirmation) {
-                    const token = jwt.sign({ data }, process.env.SECRETWORD)
+                    const token = jwt.sign({ data }, process.env.SECRETWORD) //! i will use it in the verification role 
                     ls('token', token);
                     res.json({
-
                      message: 'success' ,
                      info:data
                     })
-
                 }
                 else {
                     res.json({ message: 'confirm the email to access to your account  !!!!!' })
                 }
-
             }
 
         } else {
@@ -84,11 +79,10 @@ const signIn = (req, res) => {
         }
 
     })
-
 }
 
 
-
+// !   verify the token and get the email , for updating confirmaion feild 
 
 const confirmation = (req, res) => {
     const { token } = req.params;
@@ -96,12 +90,11 @@ const confirmation = (req, res) => {
     req.data = tkn
     User.findOneAndUpdate({ email: req.data.email }, { confirmation: true })
         .then(()=>{
-            // res.json({message:'confirmation success .'})
             res.redirect('http://localhost:3000/api/auth/login')
         })
 }
 
-
+//  ! this function  check the email if exist or not if it exist the nodemailer  send an email to reset the password ( nodemailer send the link contain  mailToken )
 const forgetPassword = (req, res) => {
   
     const { body } = req
@@ -110,39 +103,36 @@ const forgetPassword = (req, res) => {
         .then((user) => {
             if (!user) { res.json({message:'user not found with this email'}) }
             else {
-                ls('mailToken', email)
+                ls('mailToken', email) //!  to create token in nodemailer and send it in URL 
                 password_verification.forgetpassword()
                 res.json({message: 'visit email'})
             }
         })
 }
 
+// ! this function to update the password from the form who i already sended by the nodemailer  ,  i get the mail token from the URL and i verufy them  the i  find+update  the user password
 
 const resetPassword = (req, res) => {
     const { mailToken } = req.params
     const verifToken = jwt.verify(mailToken, process.env.SECRETWORD)
     if(!verifToken){console.log('token wrong ')}
     req.mail = verifToken.mail;
+    console.log('req maill:'+req.mail)
     const pass = req.body.password;
     const passHash = bcrypt.hashSync(pass, 10)
     User.findOneAndUpdate({ email: req.mail }, { password: passHash })
         .then((e) => {
-            // res.json({message: 'your password updated successfully '})
             res.redirect('http://localhost:3000/api/auth/login')
-            res.redire
-
         })
         .catch(error => {
             res.send(error)
         })
 }
 
-
-
-
+// ! just for roles 
 const Client = (req, res) => { res.json({message:'Client Page '}) }
 const Livreur = (req, res) => { res.json({message:'Livreur Page'}) }
-
+// ! here i clear   local storage 
 const logout = (req, res) => {
     ls.clear()
     res.json({message:'local storage is clear now '})

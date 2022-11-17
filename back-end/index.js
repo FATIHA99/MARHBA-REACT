@@ -2,9 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 const db = require('./db/db.js')
 const route = require('./routes/auth');
-const HandleError = require('./tools/ErrorHandling.js');
+// const HandleError = require('./tools/ErrorHandling.js');
 const ErrorHandling = require('./tools/ErrorHandling.js');
-const GlobalErr = require('./tools/globalError');
+// const GlobalErr = require('./tools/globalError');
 const globalError = require('./tools/globalError');
 const cors = require('cors');
 

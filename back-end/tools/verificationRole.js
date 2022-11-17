@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
 const ls = require('local-storage')
 
-
+// ! to verify role we get the token from local storage (alredy stored in login) and we verify it 
+//! set the tkn in the res.data  and we check the array in parameters if include this role (from data) if true => next 
 
 function verificationRole(access) {
   return (req, res, next) => {

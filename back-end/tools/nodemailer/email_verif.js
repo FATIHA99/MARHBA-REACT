@@ -3,9 +3,10 @@ const ls = require('local-storage')
 const jwt = require('jsonwebtoken')
 
 function _nodemailer() {
+  
   const email = ls('email')
-  const emtoken = jwt.sign({ email }, process.env.SECRETWORD) 
-   console.log(emtoken);
+  const emtoken = jwt.sign({ email }, process.env.SECRETWORD)
+  // ! transporter
   let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -15,7 +16,7 @@ function _nodemailer() {
       pass: 'fwpktpowqxesuptk',
     },
   });
-
+// ! onfo
   let info = {
     from: '"AUTHENTIFICATION" <fatihhaa27@gmail.com>',
     to: ls('email'),  // ! deja stocker dans  "signup"
