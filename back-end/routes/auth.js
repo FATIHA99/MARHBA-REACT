@@ -1,6 +1,6 @@
 const router = require("express").Router()
 const {signUp,signIn,confirmation,forgetPassword,resetPassword,Client,Livreur, logout} = require('../controllers/AuthController.js')
-const verif = require('../tools/verificationRole')
+const verif = require('../middlewares/verificationRole')
 const emv = require('../tools/nodemailer/email_verif')
 // ! authentification
 router.post('/auth/login',signIn);

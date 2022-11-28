@@ -5,10 +5,10 @@ const route = require('./routes/auth');
 // const HandleError = require('./tools/ErrorHandling.js');
 const ErrorHandling = require('./tools/ErrorHandling.js');
 // const GlobalErr = require('./tools/globalError');
-const globalError = require('./tools/globalError');
+const globalError = require('./middlewares/globalError');
 const cors = require('cors');
 
-const port = process.env.port || 8080
+const port = process.env.port || 3001
 const app = express();
 dotenv.config();
 app.set('view engine','ejs')

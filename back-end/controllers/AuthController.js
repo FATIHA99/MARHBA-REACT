@@ -40,6 +40,10 @@ function signUp(req, res) {
         })
         .catch()
 }
+
+ function sum(a,b){
+  return a+b;
+ }
 // !  to sign in   i check first  the email if exist if true  i check again the password (after compare ) ,if everything is good i will check the confirmation is true , i will create token and stor them 
 const signIn = (req, res) => {
     const { body } = req
@@ -137,4 +141,4 @@ const logout = (req, res) => {
     ls.clear()
     res.json({message:'local storage is clear now '})
 }
-module.exports = { signUp, signIn, confirmation, forgetPassword, resetPassword,  Client, Livreur, logout }
+module.exports = { sum,signUp, signIn, confirmation, forgetPassword, resetPassword,  Client, Livreur, logout }
