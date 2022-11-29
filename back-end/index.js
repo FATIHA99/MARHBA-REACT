@@ -23,3 +23,4 @@ app.all('*',(req,res,next)=>{
 
 app.use(globalError)
 app.listen(port,()=>{ console.log(`PORT ${port}`)})
+module.exports = app

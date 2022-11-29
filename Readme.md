@@ -79,3 +79,36 @@ delete all networks
 ```bash
 docker network prune
 ```
+
+# test with Jest 
+
+first step
+```bash
+npm i jest supertest
+```
+
+## require supertest et le fihier de   : 
+ 
+```bash
+const request = require('supertest')
+const app = require('./index');
+
+```
+## create the function describe for the backend traitement 
+```bash
+describe('test login', () => {
+      let body ={
+        email : '',
+        password : ''
+      }
+      
+
+      describe('fill field !!', () => {
+        test('fill field !!',async()=>{
+          const response = await request(app).post('/api/auth/login').send(body);
+          expect(response.statusCode).toBe(400);
+          
+        })
+      })
+ 
+})

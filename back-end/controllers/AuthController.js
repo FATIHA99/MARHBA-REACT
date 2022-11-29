@@ -25,13 +25,13 @@ function signUp(req, res) {
     const hashPassword = bcrypt.hashSync(body.password, 10)
     User.findOne({ email: body.email })
         .then((e) => {
-            if (e) { res.json({ message: 'email already exist' }) }
+            if (e) { res.status(400).json({ message: 'email already exist' }) }
             else {
                 body.password = hashPassword;
                 User.create({ ...body })
                     .then(() => {
                         verf._nodemailer()
-                        res.json({ message: 'created successfully ! verify your email' })
+                        res.status(400).json({ message: 'created successfully ! verify your email' })
                     })
                     .catch((error) => {
                         console.log(error)
@@ -55,7 +55,7 @@ const signIn = (req, res) => {
             console.log(data)
             const hashPassword = bcrypt.compareSync(pass, e.password)
             if (!hashPassword) {
-                res.json({ message: 'password wrong' })
+                res.status(400).json({ message: 'password wrong' })
             }
             else {
 
@@ -68,17 +68,17 @@ const signIn = (req, res) => {
                     })
                 }
                 else {
-                    res.json({ message: 'confirm the email to access to your account  !!!!!' })
+                    res.json({ message: 'confirm the email to access to your account  !!!!!'})
                 }
             }
 
         } else {
 
             if (!body.email || !body.password) {
-                res.json({ message: 'fill field !!' })
+                res.status(400).json({ message: 'fill field !!' })
             }
             else {
-                res.json({ message: 'user not found' })
+                res.status(400).json({ message: 'user not found' })
             }
         }
 
