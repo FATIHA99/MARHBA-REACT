@@ -19,19 +19,18 @@ const ErrorHandling = require('../tools/ErrorHandling');
 
 // ! signUP :  first i store email body in the local s , and i hash the pass then i will  check the email if it   already exist , if not i will affect the hash password in body pass and i create the user then i confirm the account with nodemailer 
 function signUp(req, res) {
-    
     const { body } = req;
     ls('email', req.body.email) //! i will use this email in the  email  nodemailer verification
     const hashPassword = bcrypt.hashSync(body.password, 10)
     User.findOne({ email: body.email })
         .then((e) => {
-            if (e) { res.status(400).json({ message: 'email already exist' }) }
+            if (e) { res.json({ message: 'email already exist' }) }
             else {
                 body.password = hashPassword;
                 User.create({ ...body })
                     .then(() => {
                         verf._nodemailer()
-                        res.status(400).json({ message: 'created successfully ! verify your email' })
+                        res.json({ message: 'created successfully ! verify your email' })
                     })
                     .catch((error) => {
                         console.log(error)
@@ -41,9 +40,7 @@ function signUp(req, res) {
         .catch()
 }
 
- function sum(a,b){
-  return a+b;
- }
+
 // !  to sign in   i check first  the email if exist if true  i check again the password (after compare ) ,if everything is good i will check the confirmation is true , i will create token and stor them 
 const signIn = (req, res) => {
     const { body } = req
@@ -55,7 +52,7 @@ const signIn = (req, res) => {
             console.log(data)
             const hashPassword = bcrypt.compareSync(pass, e.password)
             if (!hashPassword) {
-                res.status(400).json({ message: 'password wrong' })
+                res.json({ message: 'password wrong' })
             }
             else {
 
@@ -75,32 +72,29 @@ const signIn = (req, res) => {
         } else {
 
             if (!body.email || !body.password) {
-                res.status(400).json({ message: 'fill field !!' })
+                res.json({ message: 'fill field !!' })
             }
             else {
-                res.status(400).json({ message: 'user not found' })
+                res.json({ message: 'user not found' })
             }
         }
 
     })
 }
-
-
 // !   verify the token and get the email , for updating confirmaion feild 
-
 const confirmation = (req, res) => {
     const { token } = req.params;
     const tkn = jwt.verify(token, process.env.SECRETWORD)
+    console.log(tkn)
     req.data = tkn
+    console.log(req.data)
     User.findOneAndUpdate({ email: req.data.email }, { confirmation: true })
         .then(()=>{
             res.redirect('http://localhost:3000/api/auth/login')
         })
 }
-
 //  ! this function  check the email if exist or not if it exist the nodemailer  send an email to reset the password ( nodemailer send the link contain  mailToken )
 const forgetPassword = (req, res) => {
-  
     const { body } = req
     const email = body.email;
     User.findOne({ email: email })
@@ -113,9 +107,7 @@ const forgetPassword = (req, res) => {
             }
         })
 }
-
 // ! this function to update the password from the form who i already sended by the nodemailer  ,  i get the mail token from the URL and i verufy them  the i  find+update  the user password
-
 const resetPassword = (req, res) => {
     const { mailToken } = req.params
     const verifToken = jwt.verify(mailToken, process.env.SECRETWORD)
@@ -132,7 +124,6 @@ const resetPassword = (req, res) => {
             res.send(error)
         })
 }
-
 // ! just for roles 
 const Client = (req, res) => { res.json({message:'Client Page '}) }
 const Livreur = (req, res) => { res.json({message:'Livreur Page'}) }
@@ -141,4 +132,4 @@ const logout = (req, res) => {
     ls.clear()
     res.json({message:'local storage is clear now '})
 }
-module.exports = { sum,signUp, signIn, confirmation, forgetPassword, resetPassword,  Client, Livreur, logout }
+module.exports = { signUp, signIn, confirmation, forgetPassword, resetPassword,  Client, Livreur, logout }

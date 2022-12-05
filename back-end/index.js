@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const db = require('./db/db.js')
 const route = require('./routes/auth');
+const routeCategorie = require('./routes/categorie');
 // const HandleError = require('./tools/ErrorHandling.js');
 const ErrorHandling = require('./tools/ErrorHandling.js');
 // const GlobalErr = require('./tools/globalError');
@@ -16,6 +17,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended : false }))
 app.use(cors());
 app.use('/api',route);
+app.use('/api',routeCategorie);
 
 app.all('*',(req,res,next)=>{
     next(new ErrorHandling(`page not found :${req.originalUrl}`,400))

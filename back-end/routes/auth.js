@@ -2,6 +2,7 @@ const router = require("express").Router()
 const {signUp,signIn,confirmation,forgetPassword,resetPassword,Client,Livreur, logout} = require('../controllers/AuthController.js')
 const verif = require('../middlewares/verificationRole')
 const emv = require('../tools/nodemailer/email_verif')
+const categorie = require("../controllers/CategorieController.js")
 // ! authentification
 router.post('/auth/login',signIn);
 router.post('/auth/register',signUp);
